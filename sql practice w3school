@@ -1,0 +1,158 @@
+############ SQL
+#sql
+sql structure query language.
+sql keywords are not case sensitive.
+used to storing,manipulating and retrievinf data in databases.
+#rdbms
+relational database management system.
+#database
+which a programming software stores and manipulate and produces the reports using sql.
+#tables
+which consistes data in a organised format of rows and columns.
+
+#commands 
+SELECT - extracts data from a database
+UPDATE - updates data in a database
+DELETE - deletes data from a database
+INSERT INTO - inserts new data into a database
+CREATE DATABASE - creates a new database
+ALTER DATABASE - modifies a database
+CREATE TABLE - creates a new table
+ALTER TABLE - modifies a table
+DROP TABLE - deletes a table
+CREATE INDEX - creates an index (search key)
+DROP INDEX - deletes an index
+WHERE -to specify condition
+ORDER BY -sort result
+NULL - a field with no values
+TOP,LIMIT,ROWNUM -no of rows to result
+MIN,MAX - to get smallest and largest no.
+COUNT,AUG,SUM - to get count or average or sum of data.
+LIKE - %,_ used to represent a character.
+HAVING -where keyword could not be used with aggregate functions.
+
+#operaators
++ : add
+- :subtract
+* :multiply
+/ : divide
+% : modulo
+& : bitwise and
+| : bitwise or
+^ : bitwise exclusive or
++=,-=,*=,/=,%=,&=,^-=,|*=
+= :equal
+> :greater than
+< :less than
+>= :greater than or equal
+<= :less than or equal
+<> or != :not equal
+between  :to certain range
+like :search for a pattern
+in :to specify multiple possible values 
+and :both true then only true.
+or :any one true then true.
+not :not equal to given data.
+
+#wildcard
+* represents zero or more characters.
+? represents  single character.
+[] character within the brackets.
+! represens any character not in the brackets.
+- represents a range of characters.
+# represents a single numeric character.
+
+#joins
+used to combine wo or more tables.
+innerjoin - returns records that have matching values in both.
+left(outer)join - returns left table with right matching records.
+right(outer)join - returns right table with left matching records.
+full(outer)join -returns all records.
+
+#operators
+UNION -combines result set of two or more tables.
+EXISTS - test for the existence of any record in a subquery.
+SELECT INTO - copies data from one table to another.
+CASE - it goes through conditions and returns a value when the first condition is met.
+ISNULL,IFNULL,COALESCE,NVL - which replace the null value in result set. 
+STORED PROCEDURE -stored procedure is a prepared sql code that you can save,so the code can be reused over and over again.
+COMMENTS - /* ---*/ for multi line, -- for single line.
+
+#constraints
+NOTNULL - ensures that a column cannot have a null.
+UNiQUE -column values are unique.
+PRIMARY KEY -combination of not null and unique.
+FOREIGN KEY -uniquely identifies a row or record in another table.
+CHECK -values in column satisfies a specific condition.
+DEFAULT -sets default value for a column when no value is specified.
+INDEX - used to create and retrive data from database.
+
+#views
+virtual tabls
+views may be combination of one or more tables.
+
+#sql injection
+sql injection is one of the most common web hacking technique.
+txtUserId = getRequestString("UserId");
+txtSQL = "SELECT * FROM Users WHERE UserId = " + txtUserId;
+SELECT * FROM Users WHERE UserId = 105 OR 1=1; 
+txtNam = getRequestString("CustomerName");
+txtAdd = getRequestString("Address");
+txtCit = getRequestString("City");
+txtSQL = "INSERT INTO Customers (CustomerName,Address,City) Values(@0,@1,@2)";
+db.Execute(txtSQL,txtNam,txtAdd,txtCit);
+
+# examples of commands
+select * from customers;
+select cutomername,city from customers;
+select distinct city from customers;
+select count(distinct(city)) from customers;
+select * from customers where country= 'Germany' and/or country ='spain';
+select * from customers where not country ='germany';
+select * from customers order by city;
+select * from customers limit 10;
+select top 3 * from customers;
+select * from customers where rownum <=3;
+select top 50 percent * from customers;
+select * from customers where city like '[aeiou]%';
+select * from customers where country in ('germany','france','uk');
+select * from products where price between 10 and 20;
+select city as name from customers;
+select city from orders inner join customers on orders.customerid = customers.customerid;
+SELECT A.CustomerName AS CustomerName1, B.CustomerName AS CustomerName2, A.City FROM Customers A, Customers B WHERE A.CustomerID <> B.CustomerID AND A.City = B.City ORDER BY A.City;
+select city,name from customers where country = 'germany' union select city,country from suppliers where country = 'germany' order by city;
+select count(customerid),country from customers group by country order by count(customerid) desc;
+select count(customeerid),country from customers group by country having count(customerid) >5;
+select customername,contactname into customerdata from customers;
+select customername,city,country from customers order by (case when city is null then country else city end);
+select productname,unitprice*(unitsinstock+ifnull/coalesce/isnull/nvl(unitsonorder,0)) from products;
+insert into customers(customername,city)values('cardinal','stavanger');
+insert into customers(city,country) select city,country from suppliers;
+update cutomers set contactname = 'Alfred schmidt', city ='Frankfurt' where customrid = 1;
+delete from customers where country = 'Norway';
+create procedure selectallcustomers @city nvarchar(30), @postalcode nvarchar(10) as select * from customers where city = @city and postalcode = @postalcode go;  to execute this exec selectallcustomers @city = 'london',@postalcode ='WA1 1DP';
+
+# databadase
+Show databases;
+create database mydb;
+drop database mydb;
+backup database mydb to disk ='filepath';
+backup database mydb to disk = 'filepath' with differential;
+
+#table
+create table persons(id int, lastname varchar(255), firstname varchar(255), address varchar(255),city varchar(255));
+create table testtable as select customername,contactname from customers;
+drop table testtable;
+truncate table testable;
+alter table customers add email varchar(255);
+alter table customers drop column email;
+alter table customers alter/modify column email varchar(300);
+create table persons(id int notnull, name varchar(255) not null,unique(id));
+alter table persons add unique(id);
+alter table persons drop index/constraint uc_person;
+create table orders(orderid int not null, ordernumber int not null, personid int, primary key(orderid), foreign key (personid) references persons(personid));
+create index index_name on tablename (column1,column2);
+create view [brazil] as select customername,contactno from customers where country = 'brazil';
+
+
+
